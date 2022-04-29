@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ELK7.12日志收集技术调研 | zhanghuan</title>
+    <meta name="generator" content="VuePress 1.5.2">
+    <link rel="icon" href="/img/head.png">
+    <meta name="description" content="记录生活，记录成长">
+    <link rel="preload" href="/assets/css/0.styles.34d67128.css" as="style"><link rel="preload" href="/assets/js/app.90f6b05b.js" as="script"><link rel="preload" href="/assets/js/2.ac543be9.js" as="script"><link rel="preload" href="/assets/js/6.fe65734d.js" as="script"><link rel="prefetch" href="/assets/js/10.3c832ff4.js"><link rel="prefetch" href="/assets/js/11.88fc2f94.js"><link rel="prefetch" href="/assets/js/3.1e2ca282.js"><link rel="prefetch" href="/assets/js/4.c56855a7.js"><link rel="prefetch" href="/assets/js/5.c7fcffd2.js"><link rel="prefetch" href="/assets/js/7.e6b55d1a.js"><link rel="prefetch" href="/assets/js/8.abdbd237.js"><link rel="prefetch" href="/assets/js/9.54336457.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.34d67128.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="them.png" alt="zhanghuan" class="logo"> <span class="site-name can-hide">zhanghuan</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"> <a href="https://github.com/aystzh" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"> <a href="https://github.com/aystzh" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav>  <ul class="sidebar-links"><li><a href="/blog/hello.html" class="sidebar-link">首页</a></li><li><a href="/blog/java/basic/bfbc/juc/forkjoin_01.html" class="sidebar-link">ForkJoin并发框架相关原理总结</a></li><li><a href="/blog/java/jinjie/design_pattern/uml_01.html" class="sidebar-link">uml类图说明</a></li><li><a href="/blog/java/bigdata/ELK7.12日志收集技术调研.html" class="active sidebar-link">ELK7.12日志收集技术调研</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/blog/java/bigdata/ELK7.12日志收集技术调研.html#elasticsearch7-12安装" class="sidebar-link">Elasticsearch7.12安装</a></li><li class="sidebar-sub-header"><a href="/blog/java/bigdata/ELK7.12日志收集技术调研.html#kibana7-12安装" class="sidebar-link">kibana7.12安装</a></li><li class="sidebar-sub-header"><a href="/blog/java/bigdata/ELK7.12日志收集技术调研.html#logstash7-12安装" class="sidebar-link">Logstash7.12安装</a></li><li class="sidebar-sub-header"><a href="/blog/java/bigdata/ELK7.12日志收集技术调研.html#集成项目" class="sidebar-link">集成项目</a></li></ul></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="elk7-12日志收集技术调研"><a href="#elk7-12日志收集技术调研" class="header-anchor">#</a> ELK7.12日志收集技术调研</h1> <div class="language-text extra-class"><pre class="language-text"><code>ELK日志收集基于7.12版本，这里elasticsearch和kibana的安装我这里都是用了docker，具体安装步骤如下；
+</code></pre></div><h2 id="elasticsearch7-12安装"><a href="#elasticsearch7-12安装" class="header-anchor">#</a> Elasticsearch7.12安装</h2> <blockquote><p>1.编辑elastisearch配置文件</p></blockquote> <div class="language-sheel extra-class"><pre class="language-text"><code>vim /Users/zhanghuan/tools/es/config/elasticsearch.yml 
+</code></pre></div><div class="language-pro extra-class"><pre class="language-text"><code> # ======================== Elasticsearch Configuration =========================
+#
+# NOTE: Elasticsearch comes with reasonable defaults for most settings.
+#       Before you set out to tweak and tune the configuration, make sure you
+#       understand what are you trying to accomplish and the consequences.
+#
+# The primary way of configuring a node is via this file. This template lists
+# the most important settings you may want to configure for a production cluster.
+#
+# Please consult the documentation for further information on configuration options:
+# https://www.elastic.co/guide/en/elasticsearch/reference/index.html
+#
+# ---------------------------------- Cluster -----------------------------------
+#
+# Use a descriptive name for your cluster:
+#
+#cluster.name: my-application
+#
+# ------------------------------------ Node ------------------------------------
+#
+# Use a descriptive name for the node:
+#
+node.name: node-1
+#
+# Add custom attributes to the node:
+#
+#node.attr.rack: r1
+#
+# ----------------------------------- Paths ------------------------------------
+#
+# Path to directory where to store the data (separate multiple locations by comma):
+#
+#path.data: /path/to/data
+#
+# Path to log files:
+#
+#path.logs: /path/to/logs
+#
+# ----------------------------------- Memory -----------------------------------
+#
+# Lock the memory on startup:
+#
+#bootstrap.memory_lock: true
+#
+# Make sure that the heap size is set to about half the memory available
+# on the system and that the owner of the process is allowed to use this
+# limit.
+#
+# Elasticsearch performs poorly when the system is swapping the memory.
+#
+# ---------------------------------- Network -----------------------------------
+#
+# By default Elasticsearch is only accessible on localhost. Set a different
+# address here to expose this node on the network:
+#
+network.host: 0.0.0.0
+#
+# By default Elasticsearch listens for HTTP traffic on the first free port it
+# finds starting at 9200. Set a specific HTTP port here:
+#
+http.port: 9200
+#
+# For more information, consult the network module documentation.
+#
+# --------------------------------- Discovery ----------------------------------
+#
+# Pass an initial list of hosts to perform discovery when this node is started:
+# The default list of hosts is [&quot;127.0.0.1&quot;, &quot;[::1]&quot;]
+#
+#discovery.seed_hosts: [&quot;host1&quot;, &quot;host2&quot;]
+#
+# Bootstrap the cluster using an initial set of master-eligible nodes:
+#
+#cluster.initial_master_nodes: [&quot;node-1&quot;, &quot;node-2&quot;]
+cluster.initial_master_nodes: [&quot;node-1&quot;]
+#
+# For more information, consult the discovery and cluster formation module documentation.
+#
+# ---------------------------------- Various -----------------------------------
+#
+# Require explicit names when deleting indices:
+#
+#action.destructive_requires_name: true
+</code></pre></div><blockquote><p>2.拉取镜像源</p></blockquote> <div class="language-shell extra-class"><pre class="language-shell"><code>docker pull elasticsearch:7.12.0
+docker pull kibana:7.12.0
+</code></pre></div><blockquote><p>3.启动elasticsearch</p></blockquote> <div class="language-shell extra-class"><pre class="language-shell"><code>docker run -itd --name elasticsearch -v /Users/zhanghuan/tools/es/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml -p <span class="token number">9200</span>:9200 -p <span class="token number">9300</span>:9300  elasticsearch:7.12.0
+</code></pre></div><h2 id="kibana7-12安装"><a href="#kibana7-12安装" class="header-anchor">#</a> kibana7.12安装</h2> <blockquote><p>1.编辑kibana配置文件</p></blockquote> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">vim</span> /Users/zhanghuan/tools/kibana/config/kibana.yml
+</code></pre></div><div class="language-pro extra-class"><pre class="language-text"><code># Kibana is served by a back end server. This setting specifies the port to use.
+server.port: 5601
+
+# Specifies the address to which the Kibana server will bind. IP addresses and host names are both valid values.
+# The default is 'localhost', which usually means remote machines will not be able to connect.
+# To allow connections from remote users, set this parameter to a non-loopback address.
+server.host: &quot;0.0.0.0&quot;
+
+# Enables you to specify a path to mount Kibana at if you are running behind a proxy.
+# Use the `server.rewriteBasePath` setting to tell Kibana if it should remove the basePath
+# from requests it receives, and to prevent a deprecation warning at startup.
+# This setting cannot end in a slash.
+#server.basePath: &quot;&quot;
+
+# Specifies whether Kibana should rewrite requests that are prefixed with
+# `server.basePath` or require that they are rewritten by your reverse proxy.
+# This setting was effectively always `false` before Kibana 6.3 and will
+# default to `true` starting in Kibana 7.0.
+#server.rewriteBasePath: false
+
+# Specifies the public URL at which Kibana is available for end users. If
+# `server.basePath` is configured this URL should end with the same basePath.
+#server.publicBaseUrl: &quot;&quot;
+
+# The maximum payload size in bytes for incoming server requests.
+#server.maxPayloadBytes: 1048576
+
+# The Kibana server's name.  This is used for display purposes.
+#server.name: &quot;your-hostname&quot;
+
+# The URLs of the Elasticsearch instances to use for all your queries.
+elasticsearch.hosts: [&quot;http://es:9200&quot;]
+
+# Kibana uses an index in Elasticsearch to store saved searches, visualizations and
+# dashboards. Kibana creates a new index if the index doesn't already exist.
+#kibana.index: &quot;.kibana&quot;
+
+# The default application to load.
+#kibana.defaultAppId: &quot;home&quot;
+
+# If your Elasticsearch is protected with basic authentication, these settings provide
+# the username and password that the Kibana server uses to perform maintenance on the Kibana
+# index at startup. Your Kibana users still need to authenticate with Elasticsearch, which
+# is proxied through the Kibana server.
+#elasticsearch.username: &quot;kibana_system&quot;
+#elasticsearch.password: &quot;pass&quot;
+
+# Enables SSL and paths to the PEM-format SSL certificate and SSL key files, respectively.
+# These settings enable SSL for outgoing requests from the Kibana server to the browser.
+#server.ssl.enabled: false
+#server.ssl.certificate: /path/to/your/server.crt
+#server.ssl.key: /path/to/your/server.key
+
+# Optional settings that provide the paths to the PEM-format SSL certificate and key files.
+# These files are used to verify the identity of Kibana to Elasticsearch and are required when
+# xpack.security.http.ssl.client_authentication in Elasticsearch is set to required.
+#elasticsearch.ssl.certificate: /path/to/your/client.crt
+#elasticsearch.ssl.key: /path/to/your/client.key
+
+# Optional setting that enables you to specify a path to the PEM file for the certificate
+# authority for your Elasticsearch instance.
+#elasticsearch.ssl.certificateAuthorities: [ &quot;/path/to/your/CA.pem&quot; ]
+
+# To disregard the validity of SSL certificates, change this setting's value to 'none'.
+#elasticsearch.ssl.verificationMode: full
+
+# Time in milliseconds to wait for Elasticsearch to respond to pings. Defaults to the value of
+# the elasticsearch.requestTimeout setting.
+#elasticsearch.pingTimeout: 1500
+
+# Time in milliseconds to wait for responses from the back end or Elasticsearch. This value
+# must be a positive integer.
+#elasticsearch.requestTimeout: 30000
+
+# List of Kibana client-side headers to send to Elasticsearch. To send *no* client-side
+# headers, set this value to [] (an empty list).
+#elasticsearch.requestHeadersWhitelist: [ authorization ]
+
+# Header names and values that are sent to Elasticsearch. Any custom headers cannot be overwritten
+# by client-side headers, regardless of the elasticsearch.requestHeadersWhitelist configuration.
+#elasticsearch.customHeaders: {}
+
+# Time in milliseconds for Elasticsearch to wait for responses from shards. Set to 0 to disable.
+#elasticsearch.shardTimeout: 30000
+
+# Logs queries sent to Elasticsearch. Requires logging.verbose set to true.
+#elasticsearch.logQueries: false
+
+# Specifies the path where Kibana creates the process ID file.
+#pid.file: /run/kibana/kibana.pid
+
+# Enables you to specify a file where Kibana stores log output.
+#logging.dest: stdout
+
+# Set the value of this setting to true to suppress all logging output.
+#logging.silent: false
+
+# Set the value of this setting to true to suppress all logging output other than error messages.
+#logging.quiet: false
+
+# Set the value of this setting to true to log all events, including system usage information
+# and all requests.
+#logging.verbose: false
+
+# Set the interval in milliseconds to sample system and process performance
+# metrics. Minimum is 100ms. Defaults to 5000.
+#ops.interval: 5000
+
+# Specifies locale to be used for all localizable strings, dates and number formats.
+# Supported languages are the following: English - en , by default , Chinese - zh-CN .
+#i18n.locale: &quot;en&quot;
+
+</code></pre></div><blockquote><p>2.启动kibana</p></blockquote> <div class="language-shell extra-class"><pre class="language-shell"><code>docker run -d --name kibana -v /Users/zhanghuan/tools/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml -p <span class="token number">5601</span>:5601 --link<span class="token operator">=</span>elasticsearch7.12:es kibana:7.12.0
+</code></pre></div><blockquote><p>3.访问kibana</p></blockquote> <div class="language-text extra-class"><pre class="language-text"><code>http://localhost:5601
+</code></pre></div><h2 id="logstash7-12安装"><a href="#logstash7-12安装" class="header-anchor">#</a> Logstash7.12安装</h2> <div class="language-te extra-class"><pre class="language-text"><code>logstash安装我这里使用了开源安装包的形式
+</code></pre></div><blockquote><p>1.<a href="https://www.elastic.co/cn/downloads/past-releases#logstash" target="_blank" rel="noopener noreferrer">下载<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>指定版本安装包</p></blockquote> <blockquote><p>2.解压到指定目录</p></blockquote> <div class="language-she extra-class"><pre class="language-text"><code>tar -zxvf /Users/zhanghuan/tools/logstash-7.12.0-darwin-x86_64.tar.gz -C /Users/zhanghuan/tools
+</code></pre></div><blockquote><p>3.修改logstash.yml文件对自定义配置文件热加载</p></blockquote> <div class="language-pro extra-class"><pre class="language-text"><code># 设置节点的名字
+node.name: logstash-01
+# 设置 pipeline 的id
+pipeline.id: main
+pipeline.ordered: auto
+# 设置pipeline 的线程数(filter+output)，默认是cpu的核数
+# pipeline.workers: 2
+# 设置main pipeline文件所在的位置
+# path.config:
+# 自动重新加载pipeline配置文件
+config.reload.automatic: true
+# 设置http api 绑定的ip和端口
+http.host: 127.0.0.1
+http.port: 9200
+# 设置logstash队列的类型 为持久化，默认是 memory
+queue.type: persisted
+</code></pre></div><blockquote><p>4.在/Users/zhanghuan/tools/logstash-7.12.0/config下新增bmsmart.conf文件并编辑如下内容:</p></blockquote> <div class="language-config extra-class"><pre class="language-text"><code>input {
+  tcp {
+      port =&gt; 4560
+      codec =&gt; json_lines
+  }
+}
+
+output {
+  elasticsearch {
+     hosts =&gt; [&quot;127.0.0.1:9200&quot;]
+     index =&gt; &quot;applog-%{+YYYY.MM.dd}&quot;
+     document_type =&gt; &quot;log&quot;
+  }
+}
+
+</code></pre></div><blockquote><ol start="5"><li>后台指定配置文件并启动logstash</li></ol></blockquote> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">nohup</span> /Users/zhanghuan/tools/logstash-7.12.0/bin/logstash -f /Users/zhanghuan/tools/logstash-7.12.0/config/bmsmart.conf <span class="token operator">&amp;</span>
+</code></pre></div><h2 id="集成项目"><a href="#集成项目" class="header-anchor">#</a> 集成项目</h2> <blockquote><p>1.修改现有logbak-spring.xml文件,添加如下内容</p></blockquote> <div class="language-xml extra-class"><pre class="language-xml"><code> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>logstash<span class="token punctuation">&quot;</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>net.logstash.logback.appender.LogstashTcpSocketAppender<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>destination</span><span class="token punctuation">&gt;</span></span>127.0.0.1:4560<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>destination</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>encoder</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>providers</span><span class="token punctuation">&gt;</span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>timestamp</span><span class="token punctuation">&gt;</span></span>
+                    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>timeZone</span><span class="token punctuation">&gt;</span></span>UTC<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>timeZone</span><span class="token punctuation">&gt;</span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>timestamp</span><span class="token punctuation">&gt;</span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>pattern</span><span class="token punctuation">&gt;</span></span>
+                    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>pattern</span><span class="token punctuation">&gt;</span></span>
+                        {
+                        &quot;severity&quot;:&quot;%level&quot;,
+                        &quot;service&quot;: &quot;${springAppName:-}&quot;,
+                        &quot;trace&quot;: &quot;%X{X-B3-TraceId:-}&quot;,
+                        &quot;span&quot;: &quot;%X{X-B3-SpanId:-}&quot;,
+                        &quot;exportable&quot;: &quot;%X{X-Span-Export:-}&quot;,
+                        &quot;pid&quot;: &quot;${PID:-}&quot;,
+                        &quot;thread&quot;: &quot;%thread&quot;,
+                        &quot;class&quot;: &quot;%logger{40}&quot;,
+                        &quot;rest&quot;: &quot;%message&quot;
+                        }
+                    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>pattern</span><span class="token punctuation">&gt;</span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>pattern</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>providers</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>encoder</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>appender</span><span class="token punctuation">&gt;</span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>root</span> <span class="token attr-name">level</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>info<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender-ref</span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>file_info<span class="token punctuation">&quot;</span></span> <span class="token punctuation">/&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender-ref</span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>file_error<span class="token punctuation">&quot;</span></span> <span class="token punctuation">/&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender-ref</span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>logstash<span class="token punctuation">&quot;</span></span><span class="token punctuation">/&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>root</span><span class="token punctuation">&gt;</span></span>
+</code></pre></div><blockquote><p>2.启动server服务 项目启动可以成功，但刚开始会如下错误</p></blockquote> <div class="language-verilog extra-class"><pre class="language-verilog"><code><span class="token number">17</span><span class="token punctuation">:</span><span class="token number">07</span><span class="token punctuation">:</span><span class="token number">19</span><span class="token punctuation">,</span><span class="token number">199</span> <span class="token operator">|-</span>ERROR in ch<span class="token punctuation">.</span>qos<span class="token punctuation">.</span>logback<span class="token punctuation">.</span>classic<span class="token punctuation">.</span>joran<span class="token punctuation">.</span>action<span class="token punctuation">.</span>ContextNameAction <span class="token operator">-</span> Failed to rename <span class="token keyword">context</span> <span class="token punctuation">[</span>semanticube<span class="token punctuation">]</span> as <span class="token punctuation">[</span>nacos<span class="token punctuation">]</span> java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>IllegalStateException<span class="token punctuation">:</span> Context has been already given a name
+	at java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>IllegalStateException<span class="token punctuation">:</span> Context has been already given a name
+	at 	at ch<span class="token punctuation">.</span>qos<span class="token punctuation">.</span>logback<span class="token punctuation">.</span>core<span class="token punctuation">.</span>ContextBase<span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span>ContextBase<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">194</span><span class="token punctuation">)</span>
+	at 	at ch<span class="token punctuation">.</span>qos<span class="token punctuation">.</span>logback<span class="token punctuation">.</span>classic<span class="token punctuation">.</span>LoggerContext<span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span>LoggerContext<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">107</span><span class="token punctuation">)</span>
+	at 	at ch<span class="token punctuation">.</span>qos<span class="token punctuation">.</span>logback<span class="token punctuation">.</span>classic<span class="token punctuation">.</span>joran<span class="token punctuation">.</span>action<span class="token punctuation">.</span>ContextNameAction<span class="token punctuation">.</span><span class="token function">body</span><span class="token punctuation">(</span>ContextNameAction<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">31</span><span class="token punctuation">)</span>
+	at 	at ch<span class="token punctuation">.</span>qos<span class="token punctuation">.</span>logback<span class="token punctuation">.</span>core<span class="token punctuation">.</span>joran<span class="token punctuation">.</span>spi<span class="token punctuation">.</span>Interpreter<span class="token punctuation">.</span><span class="token function">callBodyAction</span><span class="token punctuation">(</span>Interpreter<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">289</span><span class="token punctuation">)</span>
+	at 	at ch<span class="token punctuation">.</span>qos<span class="token punctuation">.</span>logback<span class="token punctuation">.</span>core<span class="token punctuation">.</span>joran<span class="token punctuation">.</span>spi<span class="token punctuation">.</span>Interpreter<span class="token punctuation">.</span><span class="token function">characters</span><span class="token punctuation">(</span>Interpreter<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">172</span><span class="token punctuation">)</span>
+	at 	at ch<span class="token punctuation">.</span>qos<span class="token punctuation">.</span>logback<span class="token punctuation">.</span>core<span class="token punctuation">.</span>joran<span class="token punctuation">.</span>spi<span class="token punctuation">.</span>EventPlayer<span class="token punctuation">.</span><span class="token function">play</span><span class="token punctuation">(</span>EventPlayer<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">57</span><span class="token punctuation">)</span>
+	at 	at ch<span class="token punctuation">.</span>qos<span class="token punctuation">.</span>logback<span class="token punctuation">.</span>core<span class="token punctuation">.</span>joran<span class="token punctuation">.</span>GenericConfigurator<span class="token punctuation">.</span><span class="token function">doConfigure</span><span class="token punctuation">(</span>GenericConfigurator<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">165</span><span class="token punctuation">)</span>
+	at 	at ch<span class="token punctuation">.</span>qos<span class="token punctuation">.</span>logback<span class="token punctuation">.</span>core<span class="token punctuation">.</span>joran<span class="token punctuation">.</span>GenericConfigurator<span class="token punctuation">.</span><span class="token function">doConfigure</span><span class="token punctuation">(</span>GenericConfigurator<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">152</span><span class="token punctuation">)</span>
+	at 	at ch<span class="token punctuation">.</span>qos<span class="token punctuation">.</span>logback<span class="token punctuation">.</span>core<span class="token punctuation">.</span>joran<span class="token punctuation">.</span>GenericConfigurator<span class="token punctuation">.</span><span class="token function">doConfigure</span><span class="token punctuation">(</span>GenericConfigurator<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">110</span><span class="token punctuation">)</span>
+	at 	at ch<span class="token punctuation">.</span>qos<span class="token punctuation">.</span>logback<span class="token punctuation">.</span>core<span class="token punctuation">.</span>joran<span class="token punctuation">.</span>GenericConfigurator<span class="token punctuation">.</span><span class="token function">doConfigure</span><span class="token punctuation">(</span>GenericConfigurator<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">53</span><span class="token punctuation">)</span>
+	at 	at ch<span class="token punctuation">.</span>qos<span class="token punctuation">.</span>logback<span class="token punctuation">.</span>classic<span class="token punctuation">.</span>util<span class="token punctuation">.</span>ContextInitializer<span class="token punctuation">.</span><span class="token function">configureByResource</span><span class="token punctuation">(</span>ContextInitializer<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">75</span><span class="token punctuation">)</span>
+	at 	at com<span class="token punctuation">.</span>alibaba<span class="token punctuation">.</span>nacos<span class="token punctuation">.</span>client<span class="token punctuation">.</span>logging<span class="token punctuation">.</span>logback<span class="token punctuation">.</span>LogbackNacosLogging<span class="token punctuation">.</span><span class="token function">loadConfiguration</span><span class="token punctuation">(</span>LogbackNacosLogging<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">44</span><span class="token punctuation">)</span>
+	at 	at com<span class="token punctuation">.</span>alibaba<span class="token punctuation">.</span>nacos<span class="token punctuation">.</span>client<span class="token punctuation">.</span>utils<span class="token punctuation">.</span>LogUtils<span class="token punctuation">.</span><span class="token operator">&lt;</span>clinit<span class="token operator">&gt;</span><span class="token punctuation">(</span>LogUtils<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">47</span><span class="token punctuation">)</span>
+	at 	at com<span class="token punctuation">.</span>alibaba<span class="token punctuation">.</span>nacos<span class="token punctuation">.</span>client<span class="token punctuation">.</span><span class="token keyword">config</span><span class="token punctuation">.</span>NacosConfigService<span class="token punctuation">.</span><span class="token operator">&lt;</span>clinit<span class="token operator">&gt;</span><span class="token punctuation">(</span>NacosConfigService<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">57</span><span class="token punctuation">)</span>
+	at 	at java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>Class<span class="token punctuation">.</span><span class="token function">forName0</span><span class="token punctuation">(</span>Native Method<span class="token punctuation">)</span>
+	at 	at java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>Class<span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span>Class<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">264</span><span class="token punctuation">)</span>
+	at 	at com<span class="token punctuation">.</span>alibaba<span class="token punctuation">.</span>nacos<span class="token punctuation">.</span>api<span class="token punctuation">.</span><span class="token keyword">config</span><span class="token punctuation">.</span>ConfigFactory<span class="token punctuation">.</span><span class="token function">createConfigService</span><span class="token punctuation">(</span>ConfigFactory<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">40</span><span class="token punctuation">)</span>
+	at 	at com<span class="token punctuation">.</span>alibaba<span class="token punctuation">.</span>nacos<span class="token punctuation">.</span>api<span class="token punctuation">.</span>NacosFactory<span class="token punctuation">.</span><span class="token function">createConfigService</span><span class="token punctuation">(</span>NacosFactory<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">43</span><span class="token punctuation">)</span>
+	at 	at com<span class="token punctuation">.</span>alibaba<span class="token punctuation">.</span>cloud<span class="token punctuation">.</span>nacos<span class="token punctuation">.</span>NacosConfigProperties<span class="token punctuation">.</span><span class="token function">configServiceInstance</span><span class="token punctuation">(</span>NacosConfigProperties<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">368</span><span class="token punctuation">)</span>
+	at 	at com<span class="token punctuation">.</span>alibaba<span class="token punctuation">.</span>cloud<span class="token punctuation">.</span>nacos<span class="token punctuation">.</span>client<span class="token punctuation">.</span>NacosPropertySourceLocator<span class="token punctuation">.</span><span class="token function">locate</span><span class="token punctuation">(</span>NacosPropertySourceLocator<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">67</span><span class="token punctuation">)</span>
+	at 	at org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>cloud<span class="token punctuation">.</span>bootstrap<span class="token punctuation">.</span><span class="token keyword">config</span><span class="token punctuation">.</span>PropertySourceBootstrapConfiguration<span class="token punctuation">.</span><span class="token function">initialize</span><span class="token punctuation">(</span>PropertySourceBootstrapConfiguration<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">98</span><span class="token punctuation">)</span>
+	at 	at org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>boot<span class="token punctuation">.</span>SpringApplication<span class="token punctuation">.</span><span class="token function">applyInitializers</span><span class="token punctuation">(</span>SpringApplication<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">626</span><span class="token punctuation">)</span>
+	at 	at org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>boot<span class="token punctuation">.</span>SpringApplication<span class="token punctuation">.</span><span class="token function">prepareContext</span><span class="token punctuation">(</span>SpringApplication<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">370</span><span class="token punctuation">)</span>
+	at 	at org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>boot<span class="token punctuation">.</span>SpringApplication<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>SpringApplication<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">314</span><span class="token punctuation">)</span>
+	at 	at org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>boot<span class="token punctuation">.</span>SpringApplication<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>SpringApplication<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">1226</span><span class="token punctuation">)</span>
+	at 	at org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>boot<span class="token punctuation">.</span>SpringApplication<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>SpringApplication<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">1215</span><span class="token punctuation">)</span>
+	at 	at cn<span class="token punctuation">.</span>com<span class="token punctuation">.</span>bmsmart<span class="token punctuation">.</span>ServerManageApplication<span class="token punctuation">.</span><span class="token function">main</span><span class="token punctuation">(</span>ServerManageApplication<span class="token punctuation">.</span>java<span class="token punctuation">:</span><span class="token number">29</span><span class="token punctuation">)</span>
+</code></pre></div><div class="language-text extra-class"><pre class="language-text"><code>报错原因及解决方法详情见链接 https://github.com/alibaba/nacos/issues/1959
+</code></pre></div><blockquote><p>3.查看效果</p></blockquote> <p><img src="/assets/img/bigdata-elk-kibana01.dd3f2ccc.png" alt="bigdata-elk-kibana01"></p></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/blog/java/jinjie/design_pattern/uml_01.html" class="prev">
+        uml类图说明
+      </a></span> <!----></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.90f6b05b.js" defer></script><script src="/assets/js/2.ac543be9.js" defer></script><script src="/assets/js/6.fe65734d.js" defer></script>
+  </body>
+</html>
